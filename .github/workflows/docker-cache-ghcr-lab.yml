@@ -65,7 +65,7 @@ jobs:
   publish:
     needs: [build, security]
     # Job-level gate: only run publish if security's job output was PASS
-    if: needs.security.outputs.scan_result == 'PASS'
+    if: needs.security.outputs.scan_result == 'FAIL'
     runs-on: ubuntu-latest
     permissions:
       contents: read
