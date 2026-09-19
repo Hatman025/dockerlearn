@@ -1,5 +1,5 @@
 # Detects which microservices under src/ changed and builds/pushes only those,
-# via the reusable workflow in microservice-ci.yaml.
+
 
 name: Microservices Trigger CI
 
@@ -20,9 +20,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # -------------------------------
-  # Job 1: Detect changed services
-  # -------------------------------
+ 
+ # Detect changed services
+ 
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
@@ -62,9 +62,9 @@ jobs:
           echo "services=$SERVICES" >> "$GITHUB_OUTPUT"
 
 
-  # --------------------------------------------------
-  # Job 2: Call reusable workflow (matrix per service)
-  # --------------------------------------------------
+  
+  # Call reusable workflow (matrix per service)
+
   build-and-push:
     needs: detect-changes
     if: needs.detect-changes.outputs.services != '[]'
@@ -74,12 +74,12 @@ jobs:
       matrix:
         service: ${{ fromJson(needs.detect-changes.outputs.services) }}
 
-    # 🚨 IMPORTANT:
+   
     # Reusable workflows are called at JOB level
     uses: ./.github/workflows/microservice-ci.yaml
 
     with:
       service: ${{ matrix.service }}
     # GITHUB_TOKEN is provided automatically to reusable workflows in the
-    # same repo, so no `secrets:` block is needed for microservice-ci.yaml's
-    # GHCR login step.
+    
+    
